@@ -1,0 +1,56 @@
+package edu.cit.csit360.UserEntity;
+
+import java.time.LocalDateTime;
+
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
+@Entity
+@Table(name = "users")
+public class UserEntity {
+  @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    private String user;
+
+    private LocalDateTime dateTime;
+
+    private String note;
+
+    private String fileName;
+
+    private int ownerWallet;
+
+    // Constructors
+    public UserEntity() {}
+
+    public UserEntity(String user, LocalDateTime dateTime, String note, String fileName, int ownerWallet) {
+        this.user = user;
+        this.dateTime = dateTime;
+        this.note = note;
+        this.fileName = fileName;
+        this.ownerWallet = ownerWallet;
+    }
+
+    // Getters and Setters
+    public Long getId() { return id; }
+    public void setId(Long id) { this.id = id; }
+
+    public String getUser() { return user; }
+    public void setUser(String user) { this.user = user; }
+
+    public LocalDateTime getDateTime() { return dateTime; }
+    public void setDateTime(LocalDateTime dateTime) { this.dateTime = dateTime; }
+
+    public String getNote() { return note; }
+    public void setNote(String note) { this.note = note; }
+
+    public String getFileName() { return fileName; }
+    public void setFileName(String fileName) { this.fileName = fileName; }
+
+    public int getOwnerWallet() { return ownerWallet; }
+    public void setOwnerWallet(int ownerWallet) { this.ownerWallet = ownerWallet; }
+}
