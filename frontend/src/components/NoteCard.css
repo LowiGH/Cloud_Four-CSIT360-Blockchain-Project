@@ -1,0 +1,200 @@
+/* Notes Grid Layout - Centered */
+.notes-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); /* mas malapad cards */
+  gap: 30px;              /* mas layo-layo */
+  justify-items: center;  /* naka-center bawat card */
+  margin-top: 20px;
+  padding: 20px;
+}
+
+/* Note Card (base design) */
+.note-card {
+  background: #fff;
+  border: 1px solid #ddd;
+  border-radius: 14px; /* mas rounded */
+  padding: 25px;       /* mas spacious */
+  width: 320px;        /* mas malaki */
+  min-height: 220px;   /* mas mataas */
+  box-shadow: 0 6px 14px rgba(0, 0, 0, 0.18);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+/* Hover effect */
+.note-card:hover {
+  transform: scale(1.07);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25);
+}
+
+/* Note Title */
+.note-card h3 {
+  margin: 0 0 14px;
+  font-size: 22px;  /* mas malaki */
+  color: #222;
+}
+
+.note-card p {
+  font-size: 16px;
+  color: #333;
+  margin-bottom: 12px;
+  line-height: 1.4;
+
+  /* FIX for overflow text */
+  word-wrap: break-word;     /* old fallback */
+  overflow-wrap: break-word; /* modern browsers */
+  white-space: pre-wrap;     /* para irespeto line breaks */
+}
+
+
+/* Date text */
+.note-card small {
+  font-size: 15px; /* mas readable */
+  color: #666;
+}
+
+/* Footer (date + delete button) */
+.note-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+/* Delete Button */
+.delete-btn {
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  font-size: 22px; /* mas malaki icon */
+}
+
+/* Colors */
+.note-card.yellow {
+  background: #fff475;
+}
+
+.note-card.teal {
+  background: #a7ffeb;
+}
+
+.add-note {
+  background: #e0f7fa;
+}
+
+/* Add note text area */
+.add-note textarea {
+  width: 100%;
+  border: none;
+  resize: none;
+  background: transparent;
+  outline: none;
+  font-size: 18px; /* mas malaki text */
+  margin-bottom: 12px;
+}
+
+/* Character counter */
+.add-note small {
+  font-size: 15px;
+  color: #444;
+}
+
+/* Save button */
+.add-note button {
+  align-self: flex-end;
+  padding: 10px 16px;
+  border: none;
+  border-radius: 10px;
+  background: #4caf50;
+  color: white;
+  font-size: 15px;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.add-note button:hover {
+  background: #388e3c;
+}
+.edit-btn, .save-btn, .cancel-btn, .delete-btn {
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  font-size: 16px;
+  margin-left: 6px;
+}
+
+.save-btn {
+  color: #4caf50;
+}
+
+.cancel-btn {
+  color: #e53935;
+}
+
+.edit-btn {
+  color: #2196f3;
+}
+.note-card {
+  padding: 12px;
+  border-radius: 8px;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+  background-color: white; /* fallback */
+}
+
+.note-card.yellow {
+  background-color: #fff176; /* light yellow */
+}
+
+.note-card.teal {
+  background-color: #4db6ac; /* teal */
+}
+
+.note-card.green {
+  background-color: #81c784; /* light green */
+}
+
+.note-card.pink {
+  background-color: #f48fb1; /* light pink */
+}
+
+/* Optional: bold text handled inline in JS */
+.note-card {
+  padding: 12px;
+  border-radius: 8px;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+  background-color: white;
+}
+
+.note-card h4 {
+  margin: 0 0 4px 0;
+}
+
+.note-card.yellow { background-color: #fff176; }
+.note-card.teal { background-color: #4db6ac; }
+.note-card.green { background-color: #81c784; }
+.note-card.pink { background-color: #f48fb1; }
+
+.notes-grid {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr); /* 5 cards per row */
+  gap: 16px;
+}
+
+.note-card.add-note input,
+.note-card.add-note textarea {
+  width: 100%;
+  margin-bottom: 8px;
+}
+
+.edit-controls {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 8px;
+}
+
+.note-footer {
+  display: flex;
+  justify-content: space-between;
+  font-size: 12px;
+}

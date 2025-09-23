@@ -1,0 +1,254 @@
+/* Layout */
+.dashboard {
+  display: flex;
+  height: 100vh;
+  font-family: Arial, sans-serif;
+}
+
+/* Sidebar */
+.sidebar {
+  width: 220px;
+  background: #2d2f36;
+  color: white;
+  padding: 20px;
+}
+
+.sidebar h2 {
+  margin-bottom: 20px;
+}
+
+.sidebar ul {
+  list-style: none;
+  padding: 0;
+}
+
+.sidebar li {
+  margin: 12px 0;
+  cursor: pointer;
+  padding: 8px;
+  border-radius: 6px;
+  transition: background 0.2s;
+}
+
+.sidebar li:hover {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+/* Main Content */
+.main {
+  flex: 1;
+  padding: 30px;
+  background: #f5f6fa;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center; /* center lahat ng content */
+}
+
+.main h1 {
+  margin: 0 0 20px;
+  font-size: 32px;
+  text-align: center;
+}
+
+.main p {
+  margin-bottom: 20px;
+  color: #555;
+  text-align: center;
+}
+
+/* Add Note Form */
+.note-input {
+  background: white;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+  margin-bottom: 30px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  width: 100%;
+  max-width: 600px; /* centered form, hindi sobrang lapad */
+}
+
+.note-input input,
+.note-input textarea {
+  width: 100%;
+  padding: 12px;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  font-size: 16px;
+}
+
+.note-input textarea {
+  min-height: 100px;
+  resize: vertical;
+}
+
+.note-input button {
+  align-self: flex-end;
+  padding: 10px 18px;
+  background: #4a90e2;
+  border: none;
+  border-radius: 6px;
+  color: white;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.note-input button:hover {
+  background: #357ab7;
+}
+
+
+/* Notes Grid */
+.notes-grid {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr); /* 5 cards per row */
+  gap: 16px; /* spacing between cards */
+}
+
+/* Note Card */
+.note-card {
+  background: #fff9c4;
+  padding: 25px;
+  border-radius: 12px;
+  width: 320px;
+  min-height: 220px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  transition: transform 0.2s, box-shadow 0.2s;
+  display: flex;
+  flex-direction: column;
+  text-wrap:auto;
+  justify-content: space-between;
+  margin-bottom: 300px;
+}
+
+.note-card:hover {
+  transform: scale(1.05);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2);
+}
+
+.note-card h3 {
+  font-size: 20px;
+  margin: 0 0 10px;
+  color: #222;
+}
+
+.note-card p {
+  font-size: 16px;
+  color: #333;
+  margin-bottom: 12px;
+  line-height: 1.4;
+
+  /* FIX for overflow text */
+  word-wrap: break-word;     /* old fallback */
+  overflow-wrap: break-word; /* modern browsers */
+  white-space: pre-wrap;     /* para irespeto line breaks */
+}
+
+
+.note-card small {
+  font-size: 14px;
+  color: #555;
+}
+
+/* Toggle Mode Button */
+.toggle-btn {
+  padding: 10px 16px;
+  margin-bottom: 15px;
+  background: #4caf50;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 14px;
+  transition: background 0.2s;
+}
+
+.toggle-btn:hover {
+  background: #388e3c;
+}
+  /* Base styles for light/dark themes */
+.notes-app.light {
+  background-color: #fff;
+  color: #000;
+}
+
+.notes-app.dark {
+  background-color: #1e1e1e;
+  color: #fff;
+}
+
+.notes-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.header-buttons {
+  display: flex;
+  gap: 10px;
+}
+
+.settings-toggle {
+  font-size: 22px;
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+
+/* FULL SCREEN SETTINGS PANEL */
+.settings-container {
+  position: fixed;
+  top: 0;
+  right: 0;
+  width: 100%;
+  max-width: 500px;
+  height: 100%;
+  background-color: #f1f1f1;
+  color: #000;
+  box-shadow: -2px 0 10px rgba(0, 0, 0, 0.2);
+  z-index: 999;
+  padding: 20px;
+  animation: slideIn 0.3s ease-out;
+}
+
+@keyframes slideIn {
+  from {
+    transform: translateX(100%);
+  }
+  to {
+    transform: translateX(0);
+  }
+}
+
+.settings-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.back-button {
+  font-size: 18px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 5px;
+}
+
+.settings-content {
+  margin-top: 20px;
+}
+
+.setting-item {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 15px;
+}
+
+.setting-item label {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+}
