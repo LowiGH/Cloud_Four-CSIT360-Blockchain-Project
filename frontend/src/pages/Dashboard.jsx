@@ -1,97 +1,107 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import axios from "axios";
 import NoteCard from "../components/NoteCard";
 import "./Dashboard.css";
 
 export default function Dashboard() {
   const [editingIndex, setEditingIndex] = useState(null);
-  const [notes, setNotes] = useState([
-    {
-      user: "John Doe",
-      dateTime: new Date().toISOString(),
-      note: "This is my first note",
-      FileName: "note1.txt",
-      owner_wallet: 12345,
-      color: "yellow",
-      bold: false,
-    },
-    {
-      user: "John Doe",
-      dateTime: new Date().toISOString(),
-      note: "Pick up the groceries",
-      FileName: "note2.txt",
-      owner_wallet: 12345,
-      color: "teal",
-      bold: false,
-    },
-  ]);
-
+  const [notes, setNotes] = useState([]);
   const [showComposer, setShowComposer] = useState(false);
+
+  // Composer fields
+  const [newUser, setNewUser] = useState("");
   const [newFileName, setNewFileName] = useState("");
   const [newNote, setNewNote] = useState("");
+  const [newWallet, setNewWallet] = useState("");
 
-  // SETTINGS STATES
-  const [enableInsights, setEnableInsights] = useState(false);
-  const [confirmBeforeDelete, setConfirmBeforeDelete] = useState(true);
-  const [colorMode, setColorMode] = useState("light");
-  const [showSettingsPanel, setShowSettingsPanel] = useState(false);
+  // Fetch notes from backend when component mounts
+  useEffect(() => {
+    axios
+      .get("http://localhost:8080/api/users")
+      .then((res) => setNotes(res.data))
+      .catch((err) => console.error("Error fetching notes:", err));
+  }, []);
 
-  const addNote = () => {
-    if (!newFileName.trim() || !newNote.trim()) return;
+  // ADD NOTE
+  const addNote = async () => {
+  if (!newNote.trim()) return;
 
-    const newNoteObj = {
-      user: "John Doe",
-      dateTime: new Date().toISOString(),
-      FileName: newFileName,
-      note: newNote,
-      owner_wallet: 12345,
-      color: "green",
-      bold: false,
-    };
+  // Handle automatic filename
+  let baseName = newFileName.trim() || "Untitled";
+  let finalName = baseName + ".txt";
+  let counter = 1;
 
-    setNotes([...notes, newNoteObj]);
+  // Check for duplicates
+  const existingNames = notes.map(n => n.fileName.toLowerCase());
+  while (existingNames.includes(finalName.toLowerCase())) {
+    finalName = `${baseName}(${counter}).txt`;
+    counter++;
+  }
+
+  const newNoteObj = {
+    user: "Jenette",
+    fileName: finalName,
+    note: newNote,
+    ownerWallet: "0123",
+    dateTime: new Date().toISOString(),
+  };
+
+  try {
+    const res = await axios.post("http://localhost:8080/api/users", newNoteObj);
+    setNotes([...notes, res.data]);
     setNewFileName("");
     setNewNote("");
     setShowComposer(false);
-  };
-
-  const editNote = (index, updatedNote) => {
-    const updatedNotes = [...notes];
-    updatedNotes[index] = updatedNote;
-    setNotes(updatedNotes);
-    setEditingIndex(null);
-  };
-
-  const deleteNote = (index) => {
-    if (confirmBeforeDelete) {
-      const confirm = window.confirm("Are you sure you want to delete this note?");
-      if (!confirm) return;
+  } catch (err) {
+    console.error("Failed to save note:", err);
+  }
+};
+  // EDIT NOTE
+  const editNote = async (index, updatedNote) => {
+    try {
+      const res = await axios.put(
+        `http://localhost:8080/api/users/${updatedNote.id}`,
+        updatedNote
+      );
+      const updatedNotes = [...notes];
+      updatedNotes[index] = res.data;
+      setNotes(updatedNotes);
+      setEditingIndex(null);
+    } catch (err) {
+      console.error("Error updating note:", err);
     }
+  };
 
-    setNotes(notes.filter((_, i) => i !== index));
+  // DELETE NOTE
+  const deleteNote = async (index) => {
+    if (!window.confirm("Are you sure you want to delete this note?")) return;
+
+    try {
+      await axios.delete(`http://localhost:8080/api/users/${notes[index].id}`);
+      setNotes(notes.filter((_, i) => i !== index));
+    } catch (err) {
+      console.error("Error deleting note:", err);
+    }
   };
 
   return (
-    <div className={`notes-app ${colorMode}`}>
-      {/* Header */}
+    <div className="notes-app">
       <header className="notes-header">
         <h1>Notes</h1>
-        <div className="header-buttons">
-          <button onClick={() => setShowComposer(!showComposer)}>
-            {showComposer ? "Cancel" : "+ Add Note"}
-          </button>
-          <button
-            className="settings-toggle"
-            onClick={() => setShowSettingsPanel(true)}
-            title="Settings"
-          >
-            ⚙️
-          </button>
-        </div>
+        <button onClick={() => setShowComposer(!showComposer)}>
+          {showComposer ? "Cancel" : "+ Add Note"}
+        </button>
       </header>
 
-      {/* Composer */}
+      {/* Composer Card */}
       {showComposer && (
         <div className="note-card add-note">
+          <input
+            type="text"
+            placeholder="Username"
+            value={newUser}
+            onChange={(e) => setNewUser(e.target.value)}
+          />
           <input
             type="text"
             placeholder="File Name"
@@ -103,6 +113,12 @@ export default function Dashboard() {
             value={newNote}
             onChange={(e) => setNewNote(e.target.value)}
           />
+          <input
+            type="text"
+            placeholder="Owner Wallet"
+            value={newWallet}
+            onChange={(e) => setNewWallet(e.target.value)}
+          />
           <button onClick={addNote}>Save</button>
         </div>
       )}
@@ -111,7 +127,7 @@ export default function Dashboard() {
       <div className="notes-grid">
         {notes.map((note, i) => (
           <NoteCard
-            key={note.FileName}
+            key={note.id || note.FileName}
             data={note}
             isEditing={editingIndex === i}
             onEdit={(updatedNote) => editNote(i, updatedNote)}
@@ -121,53 +137,6 @@ export default function Dashboard() {
           />
         ))}
       </div>
-
-      {/* SETTINGS PANEL (Separate container) */}
-      {showSettingsPanel && (
-        <div className="settings-container">
-          <div className="settings-header">
-            <button onClick={() => setShowSettingsPanel(false)} className="back-button">
-              ← Back
-            </button>
-            <h2>Settings</h2>
-          </div>
-
-          <div className="settings-content">
-            <div className="setting-item">
-              <label>
-                Enable insights
-                <input
-                  type="checkbox"
-                  checked={enableInsights}
-                  onChange={() => setEnableInsights(!enableInsights)}
-                />
-              </label>
-            </div>
-
-            <div className="setting-item">
-              <label>
-                Confirm before deleting
-                <input
-                  type="checkbox"
-                  checked={confirmBeforeDelete}
-                  onChange={() => setConfirmBeforeDelete(!confirmBeforeDelete)}
-                />
-              </label>
-            </div>
-
-            <div className="setting-item">
-              <label>
-                Theme:
-                <select value={colorMode} onChange={(e) => setColorMode(e.target.value)}>
-                  <option value="light">Light</option>
-                  <option value="dark">Dark</option>
-                  <option value="system">Use my Windows mode</option>
-                </select>
-              </label>
-            </div>
-          </div>
-        </div>
-      )}
     </div>
   );
 }

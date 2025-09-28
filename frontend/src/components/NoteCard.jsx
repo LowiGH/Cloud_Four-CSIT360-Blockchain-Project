@@ -2,30 +2,31 @@ import React, { useState, useEffect } from "react";
 import "./NoteCard.css";
 
 export default function NoteCard({ data, isEditing, onEdit, onStartEdit, onCancelEdit, onDelete }) {
-  const [editedFileName, setEditedFileName] = useState(data.FileName);
+  const [editedFileName, setEditedFileName] = useState(data.fileName);
   const [editedNote, setEditedNote] = useState(data.note);
-  const [selectedColor, setSelectedColor] = useState(data.color);
-  const [isBold, setIsBold] = useState(data.bold);
+  const [selectedColor, setSelectedColor] = useState(data.color || "yellow");
+  const [isBold, setIsBold] = useState(data.bold || false);
 
+  // Update state when the data prop changes
   useEffect(() => {
-    setEditedFileName(data.FileName);
+    setEditedFileName(data.fileName);
     setEditedNote(data.note);
-    setSelectedColor(data.color);
-    setIsBold(data.bold);
+    setSelectedColor(data.color || "yellow");
+    setIsBold(data.bold || false);
   }, [data]);
 
-  const handleSave = () => {
-    if (!editedFileName.trim() || !editedNote.trim()) return;
+const handleSave = () => {
+  if (!editedFileName.trim() || !editedNote.trim()) return;
 
-    onEdit({
-      ...data,
-      FileName: editedFileName,
-      note: editedNote,
-      color: selectedColor,
-      bold: isBold,
-      dateTime: new Date().toISOString(),
-    });
-  };
+  onEdit({
+    ...data,
+    fileName: editedFileName,
+    note: editedNote,
+    dateTime: new Date().toISOString(),
+    ownerWallet: data.ownerWallet, // keep same wallet
+  });
+};
+
 
   return (
     <div className={`note-card ${selectedColor}`} style={{ fontWeight: isBold ? "bold" : "normal" }}>
@@ -58,7 +59,7 @@ export default function NoteCard({ data, isEditing, onEdit, onStartEdit, onCance
             </label>
           </div>
           <div className="note-footer">
-            <small>{data.dateTime}</small>
+            <small>{new Date(data.dateTime).toLocaleString()}</small>
             <div>
               <button onClick={handleSave}>💾</button>
               <button onClick={onCancelEdit}>✖</button>
@@ -67,10 +68,10 @@ export default function NoteCard({ data, isEditing, onEdit, onStartEdit, onCance
         </>
       ) : (
         <>
-          <h4>{data.FileName}</h4>
+          <h4>{data.fileName}</h4>
           <p>{data.note}</p>
           <div className="note-footer">
-            <small>{data.dateTime}</small>
+            <small>{new Date(data.dateTime).toLocaleString()}</small>
             <div>
               <button onClick={onStartEdit}>✏</button>
               <button onClick={onDelete}>🗑</button>
