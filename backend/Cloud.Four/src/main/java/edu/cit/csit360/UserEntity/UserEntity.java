@@ -1,33 +1,38 @@
 package edu.cit.csit360.UserEntity;
 
 import java.time.LocalDateTime;
-
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+
 @Entity
 @Table(name = "users")
 public class UserEntity {
-  @Id
+    @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(name = "username")  // renamed to avoid 'user' keyword
     private String user;
 
+    @Column(name = "date_time")
     private LocalDateTime dateTime;
 
     private String note;
 
+    @Column(name = "file_name")
     private String fileName;
 
-    private int ownerWallet;
+    @Column(name = "owner_wallet")
+    private String ownerWallet;
 
     // Constructors
     public UserEntity() {}
 
-    public UserEntity(String user, LocalDateTime dateTime, String note, String fileName, int ownerWallet) {
+    public UserEntity(String user, LocalDateTime dateTime, String note, String fileName, String ownerWallet) {
         this.user = user;
         this.dateTime = dateTime;
         this.note = note;
@@ -51,6 +56,6 @@ public class UserEntity {
     public String getFileName() { return fileName; }
     public void setFileName(String fileName) { this.fileName = fileName; }
 
-    public int getOwnerWallet() { return ownerWallet; }
-    public void setOwnerWallet(int ownerWallet) { this.ownerWallet = ownerWallet; }
+    public String getOwnerWallet() { return ownerWallet; }
+    public void setOwnerWallet(String ownerWallet) { this.ownerWallet = ownerWallet; }
 }
