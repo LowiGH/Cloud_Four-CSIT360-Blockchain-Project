@@ -1,5 +1,6 @@
 # 1. Use official Maven image to build the project
-FROM maven:3.9.2-eclipse-temurin-17 AS build
+# FROM maven:3.9.2-eclipse-temurin-17 AS build
+FROM maven:3.9.2-eclipse-temurin-17-jammy AS build
 
 # Set working directory
 WORKDIR /app
@@ -14,8 +15,13 @@ COPY src ./src
 # Build the jar (skip tests for faster build)
 RUN mvn clean package -DskipTests
 
+# Windows compatibility
 # 2. Use lightweight Java runtime image to run the jar
-FROM eclipse-temurin:17-jre-alpine
+#FROM eclipse-temurin:17-jre-alpine
+
+# Apple silicon compatibility
+# 2. Use lightweight Java runtime image to run the jar
+FROM eclipse-temurin:17-jre-jammy
 
 # Set working directory
 WORKDIR /app
