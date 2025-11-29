@@ -1,0 +1,34 @@
+# 1. Use official Maven image to build the project
+FROM maven:3.9.2-eclipse-temurin-17 AS build
+
+# Set working directory
+WORKDIR /app
+
+# Copy pom.xml and download dependencies
+COPY pom.xml .
+RUN mvn dependency:go-offline -B
+
+# Copy the source code
+COPY src ./src
+
+# Build the jar (skip tests for faster build)
+RUN mvn clean package -DskipTests
+
+# 2. Use lightweight Java runtime image to run the jar
+FROM eclipse-temurin:17-jre-alpine
+
+# Set working directory
+WORKDIR /app
+
+# Copy jar from the build stage
+COPY --from=build /app/target/*.jar app.jar
+
+# Expose port (Render uses $PORT env variable)
+ENV PORT 8080
+EXPOSE $PORT
+
+# Let Spring Boot pick the port from environment variable
+ENV JAVA_OPTS="-Dserver.port=$PORT"
+
+# Run the jar
+ENTRYPOINT ["sh", "-c", "java $JAVA_OPTS -jar app.jar"]
