@@ -1,9 +1,9 @@
 /* Notes Grid Layout - Centered */
 .notes-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); /* mas malapad cards */
-  gap: 30px;              /* mas layo-layo */
-  justify-items: center;  /* naka-center bawat card */
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 30px;
+  justify-items: center;
   margin-top: 20px;
   padding: 20px;
 }
@@ -12,10 +12,10 @@
 .note-card {
   background: #fff;
   border: 1px solid #ddd;
-  border-radius: 14px; /* mas rounded */
-  padding: 25px;       /* mas spacious */
-  width: 320px;        /* mas malaki */
-  min-height: 220px;   /* mas mataas */
+  border-radius: 14px;
+  padding: 25px;
+  width: 320px;
+  min-height: 220px;
   box-shadow: 0 6px 14px rgba(0, 0, 0, 0.18);
   display: flex;
   flex-direction: column;
@@ -32,7 +32,7 @@
 /* Note Title */
 .note-card h3 {
   margin: 0 0 14px;
-  font-size: 22px;  /* mas malaki */
+  font-size: 22px;
   color: #222;
 }
 
@@ -41,66 +41,61 @@
   color: #333;
   margin-bottom: 12px;
   line-height: 1.4;
-
-  /* FIX for overflow text */
-  word-wrap: break-word;     /* old fallback */
-  overflow-wrap: break-word; /* modern browsers */
-  white-space: pre-wrap;     /* para irespeto line breaks */
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+  white-space: pre-wrap;
 }
-
 
 /* Date text */
 .note-card small {
-  font-size: 15px; /* mas readable */
+  font-size: 15px;
   color: #666;
 }
 
-/* Footer (date + delete button) */
+/* Footer */
 .note-footer {
   display: flex;
   justify-content: space-between;
   align-items: center;
 }
 
-/* Delete Button */
-.delete-btn {
+/* Buttons */
+.edit-btn, .save-btn, .cancel-btn, .delete-btn {
   border: none;
   background: transparent;
   cursor: pointer;
-  font-size: 22px; /* mas malaki icon */
+  font-size: 16px;
+  margin-left: 6px;
 }
+
+.save-btn { color: #4caf50; }
+.cancel-btn { color: #e53935; }
+.edit-btn { color: #2196f3; }
+.delete-btn { font-size: 22px; }
 
 /* Colors */
-.note-card.yellow {
-  background: #fff475;
-}
+.note-card.yellow { background: #fff475; }
+.note-card.teal { background: #a7ffeb; }
+.note-card.green { background: #81c784; }
+.note-card.pink { background: #f48fb1; }
 
-.note-card.teal {
-  background: #a7ffeb;
-}
-
-.add-note {
-  background: #e0f7fa;
-}
-
-/* Add note text area */
+/* Add note */
+.add-note { background: #e0f7fa; }
 .add-note textarea {
   width: 100%;
   border: none;
   resize: none;
   background: transparent;
   outline: none;
-  font-size: 18px; /* mas malaki text */
+  font-size: 18px;
   margin-bottom: 12px;
 }
 
-/* Character counter */
 .add-note small {
   font-size: 15px;
   color: #444;
 }
 
-/* Save button */
 .add-note button {
   align-self: flex-end;
   padding: 10px 16px;
@@ -113,71 +108,12 @@
   transition: background 0.2s;
 }
 
-.add-note button:hover {
-  background: #388e3c;
-}
-.edit-btn, .save-btn, .cancel-btn, .delete-btn {
-  border: none;
-  background: transparent;
-  cursor: pointer;
-  font-size: 16px;
-  margin-left: 6px;
-}
+.add-note button:hover { background: #388e3c; }
 
-.save-btn {
-  color: #4caf50;
-}
-
-.cancel-btn {
-  color: #e53935;
-}
-
-.edit-btn {
-  color: #2196f3;
-}
-.note-card {
-  padding: 12px;
-  border-radius: 8px;
-  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-  background-color: white; /* fallback */
-}
-
-.note-card.yellow {
-  background-color: #fff176; /* light yellow */
-}
-
-.note-card.teal {
-  background-color: #4db6ac; /* teal */
-}
-
-.note-card.green {
-  background-color: #81c784; /* light green */
-}
-
-.note-card.pink {
-  background-color: #f48fb1; /* light pink */
-}
-
-/* Optional: bold text handled inline in JS */
-.note-card {
-  padding: 12px;
-  border-radius: 8px;
-  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-  background-color: white;
-}
-
-.note-card h4 {
-  margin: 0 0 4px 0;
-}
-
-.note-card.yellow { background-color: #fff176; }
-.note-card.teal { background-color: #4db6ac; }
-.note-card.green { background-color: #81c784; }
-.note-card.pink { background-color: #f48fb1; }
-
+/* Layout override */
 .notes-grid {
   display: grid;
-  grid-template-columns: repeat(5, 1fr); /* 5 cards per row */
+  grid-template-columns: repeat(5, 1fr);
   gap: 16px;
 }
 
