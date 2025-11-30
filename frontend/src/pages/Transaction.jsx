@@ -27,7 +27,8 @@ export default function Transaction() {
 
     const newTx = {
       type: txType,
-      toAddress,
+      toAddress: txType === "Send" ? toAddress : "",
+      fromAddress: txType === "Receive" ? toAddress : "",
       amount: parseFloat(amount),
       memo: memo || "No memo",
       status: "Pending",
@@ -51,6 +52,24 @@ export default function Transaction() {
 
     } catch (err) {
       console.error("Failed to save:", err);
+    }
+  };
+
+  // Confirm Transaction
+  const confirmTransaction = async (txId) => {
+    try {
+      const res = await axios.patch(
+        `http://localhost:8080/api/transactions/${txId}`,
+        { status: "Confirmed" }
+      );
+
+      // Update transaction in state
+      setTransactions(transactions.map(tx => 
+        tx.id === txId ? { ...tx, status: "Confirmed" } : tx
+      ));
+
+    } catch (err) {
+      console.error("Failed to confirm:", err);
     }
   };
 
@@ -82,8 +101,6 @@ export default function Transaction() {
         return "#6b7280";
     }
   };
-
-
 
   return (
     <div style={{
@@ -355,8 +372,8 @@ export default function Transaction() {
                     <span style={{
                       padding: "0.25rem 0.75rem",
                       borderRadius: "6px",
-                      background: tx.type === "Send" ? "#fee2e2" : "#dbeafe",
-                      color: tx.type === "Send" ? "#dc2626" : "#2563eb",
+                      background: tx.type === "Send" ? "#fee2e2" : "#dcfce7",
+                      color: tx.type === "Send" ? "#dc2626" : "#16a34a",
                       fontSize: "0.85rem",
                       fontWeight: "600"
                     }}>
@@ -374,7 +391,7 @@ export default function Transaction() {
                     </span>
                   </div>
                   <p style={{ fontSize: "0.9rem", color: theme === "light" ? "#64748b" : "#94a3b8", margin: 0 }}>
-                    {tx.toAddress || tx.fromAddress}
+                    {tx.type === "Send" ? tx.toAddress : tx.fromAddress || tx.toAddress}
                   </p>
                 </div>
                 <div style={{ textAlign: "right" }}>
@@ -415,6 +432,33 @@ export default function Transaction() {
                   </>
                 )}
               </div>
+
+              {/* Confirm Button - Only show for Pending transactions */}
+              {tx.status === "Pending" && (
+                <div style={{ marginTop: "1rem", display: "flex", justifyContent: "flex-end" }}>
+                  <button
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      confirmTransaction(tx.id);
+                    }}
+                    style={{
+                      padding: "0.5rem 1.5rem",
+                      border: "none",
+                      borderRadius: "8px",
+                      background: "#10b981",
+                      color: "white",
+                      cursor: "pointer",
+                      fontWeight: "600",
+                      display: "flex",
+                      alignItems: "center",
+                      gap: "0.5rem"
+                    }}
+                  >
+                    <span>✓</span>
+                    Confirm Transaction
+                  </button>
+                </div>
+              )}
             </div>
           ))}
         </div>
