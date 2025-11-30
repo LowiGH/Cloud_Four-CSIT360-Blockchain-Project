@@ -1,17 +1,19 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import "./Profile.css"; // optional, you can style it later
+import { useNavigate } from "react-router-dom";
+import "./Profile.css";
 
 export default function Profile() {
+  const navigate = useNavigate();
+
   const [user, setUser] = useState({
     username: "",
     email: "",
     wallet: "",
   });
 
-  // Fetch user data (dummy example)
+  // Fetch user data
   useEffect(() => {
-    // Replace with actual API call to fetch logged-in user info
     axios
       .get("http://localhost:8080/api/profile")
       .then((res) => setUser(res.data))
@@ -36,7 +38,21 @@ export default function Profile() {
 
   return (
     <div className="profile-page">
-      <h1>Your Profile</h1>
+      {/* Header */}
+      <header className="dashboard-header profile-header">
+        <div className="header-content">
+          <button
+            onClick={() => navigate("/")}
+            className="back-button"
+            title="Back to Dashboard"
+          >
+            ←
+          </button>
+          <h1 className="page-title">Your Profile</h1>
+        </div>
+      </header>
+
+      {/* Profile Form */}
       <div className="profile-form">
         <label>
           Username:
@@ -47,14 +63,27 @@ export default function Profile() {
             onChange={handleChange}
           />
         </label>
+
         <label>
           Email:
-          <input type="email" name="email" value={user.email} onChange={handleChange} />
+          <input
+            type="email"
+            name="email"
+            value={user.email}
+            onChange={handleChange}
+          />
         </label>
+
         <label>
           Wallet ID:
-          <input type="text" name="wallet" value={user.wallet} onChange={handleChange} />
+          <input
+            type="text"
+            name="wallet"
+            value={user.wallet}
+            onChange={handleChange}
+          />
         </label>
+
         <button onClick={saveProfile} className="save-button">
           Save Profile
         </button>

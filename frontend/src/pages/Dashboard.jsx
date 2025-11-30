@@ -1,8 +1,11 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 import "./Dashboard.css";
 
 export default function Dashboard() {
+  const navigate = useNavigate();
+
   const [notes, setNotes] = useState([]);
   const [showComposer, setShowComposer] = useState(false);
   const [editingId, setEditingId] = useState(null);
@@ -157,9 +160,9 @@ export default function Dashboard() {
               <span className="plus-icon">+</span>
               Add
             </button>
-            {/* Profile Button */}
+            {/* Profile Button using useNavigate */}
             <button
-              onClick={() => (window.location.href = "/profile")}
+              onClick={() => navigate("/profile")}
               className="profile-button"
               title="View Profile"
             >
