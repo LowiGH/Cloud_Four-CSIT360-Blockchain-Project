@@ -72,9 +72,9 @@ Frontend Setup
 ```bash
 Name	Role
 Louie V. Bajamunde            -Developer        -  louie.bajamunde@cit.edu           | @LowiGH
-Jenette M. Ephan              -Developer        -  matthewrimar.martus@cit.edu             | @jeenette
-Matthew Rimar S. Martus       -Developer        -  jenette.ephan@cit.edu          | @Mr-cmd-pip
-Jan Elseph Yu                 -Developer        -  janelseph.yu@cit.edu          |@JanElsephYu
+Jenette M. Ephan              -Developer        -  matthewrimar.martus@cit.edu       | @jeenette
+Matthew Rimar S. Martus       -Developer        -  jenette.ephan@cit.edu             | @Mr-cmd-pip
+Jan Elseph Yu                 -Developer        -  janelseph.yu@cit.edu              |@JanElsephYu
 ```
 
 📅 Project Information
