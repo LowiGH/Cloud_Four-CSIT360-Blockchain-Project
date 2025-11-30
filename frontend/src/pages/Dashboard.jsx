@@ -157,6 +157,14 @@ export default function Dashboard() {
               <span className="plus-icon">+</span>
               Add
             </button>
+            {/* Profile Button */}
+            <button
+              onClick={() => (window.location.href = "/profile")}
+              className="profile-button"
+              title="View Profile"
+            >
+              👤 Profile
+            </button>
           </div>
         </div>
       </header>
