@@ -125,7 +125,7 @@ export default function Dashboard() {
     return matchesCategory && matchesSearch;
   });
 
-  const categories = ["ALL", "Personal", "Home", "Business"];
+  const categories = ["Notes", "Cardano Transactions", "History", "Setting"];
 
   return (
     <div className="modern-dashboard" data-theme={theme}>
