@@ -212,9 +212,8 @@ export default function Dashboard() {
                   onChange={(e) => setNewCategory(e.target.value)}
                   className="category-select"
                 >
-                  <option value="Personal">Personal</option>
-                  <option value="Home">Home</option>
-                  <option value="Business">Business</option>
+                  <option value="Notes">Home</option>
+                  <option value="Transaction">Personal</option>
                 </select>
                 <div className="composer-actions">
                   <button
