@@ -32,16 +32,27 @@
   box-sizing: border-box;
 }
 
+html, body, #root {
+  height: 100%;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+}
+
 body {
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
   background: var(--bg-primary);
   color: var(--text-primary);
+  overflow-x: hidden;
 }
 
 /* Modern Dashboard Layout */
 .modern-dashboard {
   min-height: 100vh;
+  width: 100%;
   background: var(--bg-primary);
+  display: flex;
+  flex-direction: column;
 }
 
 /* Header */
@@ -142,8 +153,10 @@ body {
 /* Main Content */
 .dashboard-main {
   max-width: 1400px;
+  width: 100%;
   margin: 0 auto;
   padding: 2rem;
+  flex: 1;
 }
 
 .page-title {
