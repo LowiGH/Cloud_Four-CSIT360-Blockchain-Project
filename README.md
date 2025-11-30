@@ -12,20 +12,6 @@ Cloud Four is a next-gen cloud storage solution that prioritizes data ownership 
 
 ---
 
-📂 Project Structure
-Cloud_Four-CSIT360-Blockchain-Project/
-│
-├─ backend/           # API backend (Node.js + Express)
-│
-├─ frontend/          # React frontend
-│   ├─ Dashboard.jsx  # Main dashboard component
-│   └─ Dashboard.css  # Styles for the dashboard
-│
-├─ README.md
-└─ .gitignore
-
----
-
 ## ⚙️ Getting Started
 Prerequisites
 Make sure you have installed:
