@@ -13,9 +13,9 @@ export default function Dashboard() {
   const [searchQuery, setSearchQuery] = useState("");
   const [theme, setTheme] = useState(() => {
     try {
-      return localStorage.getItem("cloudfour_theme") || "light";
+      return localStorage.getItem("cloudfour_theme") || "dark";
     } catch {
-      return "light";
+      return "dark";
     }
   });
 
@@ -24,6 +24,15 @@ export default function Dashboard() {
   const [newFileName, setNewFileName] = useState("");
   const [newNote, setNewNote] = useState("");
   const [newCategory, setNewCategory] = useState("Personal");
+  
+  // Get current user from localStorage
+  useEffect(() => {
+    const storedUser = localStorage.getItem("user");
+    if (storedUser) {
+      const userData = JSON.parse(storedUser);
+      setNewUser(userData.username || "User");
+    }
+  }, []);
 
   // Edit fields
   const [editFileName, setEditFileName] = useState("");
@@ -56,12 +65,15 @@ export default function Dashboard() {
       counter++;
     }
 
+    const storedUser = localStorage.getItem("user");
+    const userData = storedUser ? JSON.parse(storedUser) : null;
+    
     const newNoteObj = {
-      user: newUser || "Jenette",
+      user: newUser || (userData?.username || "User"),
       fileName: finalName,
       note: newNote,
       category: newCategory,
-      ownerWallet: "0123",
+      ownerWallet: userData?.walletAddress || "",
       dateTime: new Date().toISOString(),
     };
 
@@ -128,7 +140,7 @@ export default function Dashboard() {
     return matchesCategory && matchesSearch;
   });
 
-  const categories = ["Notes", "Cardano Transactions", "History", "Setting"];
+  const categories = ["ALL", "Personal", "Home", "Business"];
 
   return (
     <div className="modern-dashboard" data-theme={theme}>
@@ -161,6 +173,13 @@ export default function Dashboard() {
               Add
             </button>
             {/* Profile Button using useNavigate */}
+            <button
+              onClick={() => navigate("/transaction")}
+              className="transaction-button"
+              title="View Transactions"
+            >
+              ⛓️ Transactions
+            </button>
             <button
               onClick={() => navigate("/profile")}
               className="profile-button"
@@ -223,8 +242,9 @@ export default function Dashboard() {
                   onChange={(e) => setNewCategory(e.target.value)}
                   className="category-select"
                 >
-                  <option value="Notes">Home</option>
-                  <option value="Transaction">Personal</option>
+                  <option value="Personal">Personal</option>
+                  <option value="Home">Home</option>
+                  <option value="Business">Business</option>
                 </select>
                 <div className="composer-actions">
                   <button

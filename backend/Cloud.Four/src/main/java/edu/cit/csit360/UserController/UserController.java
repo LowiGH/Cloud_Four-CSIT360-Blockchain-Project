@@ -51,6 +51,7 @@ private final UserService userService;
                     user.setFileName(userDetails.getFileName());
                     user.setOwnerWallet(userDetails.getOwnerWallet());
                     user.setDateTime(userDetails.getDateTime());
+                    user.setCategory(userDetails.getCategory());
                     return ResponseEntity.ok(userService.saveUser(user));
                 })
                 .orElse(ResponseEntity.notFound().build());

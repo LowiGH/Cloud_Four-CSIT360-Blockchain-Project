@@ -1,105 +1,206 @@
-/* Page container */
 .profile-page {
-    min-height: 100vh;
-    background: transparent;
-    color: var(--text-color, #000); /* default text color */
-    font-family: sans-serif;
+  min-height: 100vh;
+  background: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #334155 100%);
+  color: #e2e8f0;
+}
+
+.profile-header {
+  background: rgba(30, 41, 59, 0.95);
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid rgba(59, 130, 246, 0.2);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+}
+
+.profile-header .header-content {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 1rem 2rem;
+}
+
+.back-button {
+  padding: 0.75rem 1.25rem;
+  font-size: 1rem;
+  border: none;
+  border-radius: 10px;
+  background: rgba(59, 130, 246, 0.2);
+  color: #3b82f6;
+  cursor: pointer;
+  transition: all 0.3s;
+  border: 1px solid rgba(59, 130, 246, 0.3);
+}
+
+.back-button:hover {
+  background: rgba(59, 130, 246, 0.3);
+  transform: translateX(-2px);
+}
+
+.logout-button {
+  padding: 0.75rem 1.5rem;
+  font-size: 0.95rem;
+  border: none;
+  border-radius: 10px;
+  background: rgba(239, 68, 68, 0.2);
+  color: #fca5a5;
+  cursor: pointer;
+  transition: all 0.3s;
+  border: 1px solid rgba(239, 68, 68, 0.3);
+  font-weight: 500;
+}
+
+.logout-button:hover {
+  background: rgba(239, 68, 68, 0.3);
+}
+
+.profile-container {
+  max-width: 800px;
+  margin: 2rem auto;
+  padding: 0 2rem;
+}
+
+.profile-card {
+  background: rgba(30, 41, 59, 0.95);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(59, 130, 246, 0.2);
+  border-radius: 20px;
+  padding: 3rem;
+  box-shadow: 
+    0 20px 60px rgba(0, 0, 0, 0.5),
+    0 0 0 1px rgba(59, 130, 246, 0.1);
+}
+
+.profile-header-section {
+  text-align: center;
+  margin-bottom: 2.5rem;
+  padding-bottom: 2rem;
+  border-bottom: 1px solid rgba(59, 130, 246, 0.2);
+}
+
+.profile-avatar {
+  width: 100px;
+  height: 100px;
+  margin: 0 auto 1rem;
+  background: linear-gradient(135deg, #3b82f6 0%, #8b5cf6 100%);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 3rem;
+  box-shadow: 0 8px 24px rgba(59, 130, 246, 0.4);
+}
+
+.profile-header-section h2 {
+  font-size: 1.75rem;
+  font-weight: 700;
+  margin-bottom: 0.5rem;
+  background: linear-gradient(135deg, #3b82f6 0%, #8b5cf6 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.profile-subtitle {
+  color: #94a3b8;
+  font-size: 0.95rem;
+  margin: 0;
+}
+
+.profile-error {
+  padding: 1rem;
+  background: rgba(239, 68, 68, 0.1);
+  border: 1px solid rgba(239, 68, 68, 0.3);
+  border-radius: 10px;
+  color: #fca5a5;
+  margin-bottom: 1.5rem;
+  text-align: center;
+}
+
+.profile-success {
+  padding: 1rem;
+  background: rgba(16, 185, 129, 0.1);
+  border: 1px solid rgba(16, 185, 129, 0.3);
+  border-radius: 10px;
+  color: #6ee7b7;
+  margin-bottom: 1.5rem;
+  text-align: center;
+}
+
+.profile-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.form-group label {
+  color: #e2e8f0;
+  font-size: 0.95rem;
+  font-weight: 500;
+}
+
+.form-group input {
+  padding: 0.875rem 1rem;
+  background: rgba(15, 23, 42, 0.5);
+  border: 1px solid rgba(59, 130, 246, 0.2);
+  border-radius: 10px;
+  color: #e2e8f0;
+  font-size: 0.95rem;
+  transition: all 0.3s;
+}
+
+.form-group input:focus {
+  outline: none;
+  border-color: #3b82f6;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+  background: rgba(15, 23, 42, 0.7);
+}
+
+.form-group input::placeholder {
+  color: #64748b;
+}
+
+.form-hint {
+  color: #64748b;
+  font-size: 0.85rem;
+  margin-top: 0.25rem;
+}
+
+.save-button {
+  padding: 1rem 2rem;
+  background: linear-gradient(135deg, #3b82f6 0%, #8b5cf6 100%);
+  border: none;
+  border-radius: 10px;
+  color: white;
+  font-weight: 600;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: all 0.3s;
+  margin-top: 0.5rem;
+  box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+}
+
+.save-button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(59, 130, 246, 0.4);
+}
+
+@media (max-width: 768px) {
+  .profile-card {
+    padding: 2rem;
   }
-  
-  /* Header (matches Dashboard) */
-  .profile-header {
-    display: flex;
-    align-items: center; /* vertically center everything */
-    padding: 0 20px;
-    height: 60px;
-    background-color: var(--header-bg, #fff); /* same as dashboard header */
-    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-    position: relative;
+
+  .profile-container {
+    padding: 0 1rem;
   }
-  
 
   .profile-header .header-content {
-    display: flex;
-    align-items: center; /* vertically center button + title */
-    width: 100%;
+    padding: 1rem;
   }
-  
-  .back-button {
-    padding: 8px 12px;
-    font-size: 1.2rem;
-    border: none;
-    border-radius: 6px;
-    background-color: var(--primary-color, #4caf50);
-    color: white;
-    cursor: pointer;
-    margin-right: 20px;
-  }
-  
-  .page-title {
-    font-size: 1.5rem;
-    font-weight: bold;
-    color: var(--text-on-header, #000);
-    margin: 0; /* remove default top/bottom margin */
-    line-height: 36px; /* match button height for perfect alignment */
-  }
-  
-  /* Profile Form */
-  .profile-form {
-    max-width: 400px;
-    margin: 40px auto 0;
-    display: flex;
-    flex-direction: column;
-    gap: 15px;
-  }
-  
-  .profile-form label {
-    display: flex;
-    flex-direction: column;
-    font-weight: 500;
-    color: var(--label-color, #555); /* grey in dark mode */
-  }
-  
-  .profile-form input {
-    padding: 10px;
-    border-radius: 6px;
-    border: 1px solid var(--input-border, #ccc);
-    background-color: var(--input-bg, #fff);
-    color: var(--text-color, #000);
-    margin-top: 5px;
-  }
-  
-  /* Save button */
-  .save-button {
-    padding: 10px 20px;
-    font-size: 1rem;
-    border: none;
-    border-radius: 6px;
-    background-color: var(--primary-color, #4caf50);
-    color: white;
-    cursor: pointer;
-    transition: background-color 0.2s ease;
-  }
-  
-  .save-button:hover {
-    background-color: var(--primary-hover, #45a049);
-  }
-  
-  /* Dark mode adjustments using CSS variables from Dashboard */
-  [data-theme="dark"] .profile-header {
-    background-color: #1e1e2f;
-  }
-  
-  [data-theme="dark"] .page-title {
-    color: #fff;
-  }
-  
-  [data-theme="dark"] .profile-form label {
-    color: #aaa;
-  }
-  
-  [data-theme="dark"] .profile-form input {
-    background-color: #2a2a3d;
-    color: #eee;
-    border: 1px solid #555;
-  }
-  
+}

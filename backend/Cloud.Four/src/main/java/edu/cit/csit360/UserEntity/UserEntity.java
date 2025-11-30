@@ -29,15 +29,19 @@ public class UserEntity {
     @Column(name = "owner_wallet")
     private String ownerWallet;
 
+    @Column(name = "category")
+    private String category;
+
     // Constructors
     public UserEntity() {}
 
-    public UserEntity(String user, LocalDateTime dateTime, String note, String fileName, String ownerWallet) {
+    public UserEntity(String user, LocalDateTime dateTime, String note, String fileName, String ownerWallet, String category) {
         this.user = user;
         this.dateTime = dateTime;
         this.note = note;
         this.fileName = fileName;
         this.ownerWallet = ownerWallet;
+        this.category = category;
     }
 
     // Getters and Setters
@@ -58,4 +62,7 @@ public class UserEntity {
 
     public String getOwnerWallet() { return ownerWallet; }
     public void setOwnerWallet(String ownerWallet) { this.ownerWallet = ownerWallet; }
+
+    public String getCategory() { return category; }
+    public void setCategory(String category) { this.category = category; }
 }

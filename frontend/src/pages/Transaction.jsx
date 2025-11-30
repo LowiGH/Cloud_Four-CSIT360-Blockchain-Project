@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 export default function Transaction() {
+  const navigate = useNavigate();
   const [transactions, setTransactions] = useState([]);
   const [showNewTx, setShowNewTx] = useState(false);
   const [activeTab, setActiveTab] = useState("ALL");
@@ -110,6 +112,34 @@ export default function Transaction() {
           alignItems: "center",
           gap: "1rem"
         }}>
+          <button
+            onClick={() => navigate("/")}
+            style={{
+              padding: "0.75rem 1.25rem",
+              fontSize: "1rem",
+              border: "1px solid rgba(59, 130, 246, 0.3)",
+              borderRadius: "10px",
+              background: "rgba(59, 130, 246, 0.2)",
+              color: "#3b82f6",
+              cursor: "pointer",
+              transition: "all 0.3s",
+              fontWeight: "500",
+              display: "flex",
+              alignItems: "center",
+              gap: "0.5rem"
+            }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.background = "rgba(59, 130, 246, 0.3)";
+              e.currentTarget.style.transform = "translateX(-2px)";
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.background = "rgba(59, 130, 246, 0.2)";
+              e.currentTarget.style.transform = "translateX(0)";
+            }}
+            title="Back to Dashboard"
+          >
+            ← Back
+          </button>
           <div style={{ position: "relative", flex: 1, maxWidth: "400px" }}>
             <span style={{ position: "absolute", left: "12px", top: "50%", transform: "translateY(-50%)" }}>🔍</span>
             <input
