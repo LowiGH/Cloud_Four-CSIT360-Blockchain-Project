@@ -9,9 +9,9 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 
 
 @SpringBootApplication
-@ComponentScan(basePackages = {"edu.cit.csit360.UserController", "edu.cit.csit360.UserService"})
-@EntityScan(basePackages = {"edu.cit.csit360.UserEntity"})
-@EnableJpaRepositories(basePackages = {"edu.cit.csit360.UserRepo"})
+@ComponentScan(basePackages = {"edu.cit.csit360.UserController","edu.cit.csit360.TransactionController", "edu.cit.csit360.UserService", "edu.cit.csit360.TransactionService"})
+@EntityScan(basePackages = {"edu.cit.csit360.UserEntity", "edu.cit.csit360.TransactionEntity"})
+@EnableJpaRepositories(basePackages = {"edu.cit.csit360.UserRepo", "edu.cit.csit360.TransactionRepo"})
 public class Application {
 
 	public static void main(String[] args) {
