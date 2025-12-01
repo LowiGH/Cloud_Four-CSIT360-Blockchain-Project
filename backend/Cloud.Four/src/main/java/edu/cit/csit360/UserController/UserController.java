@@ -19,11 +19,35 @@ import edu.cit.csit360.UserService.UserService;
 @RestController
 @RequestMapping("/api/users")
 public class UserController {
-private final UserService userService;
+    private final UserService userService;
 
     public UserController(UserService userService) {
         this.userService = userService;
     }
+
+    // -------------------------------
+    // PROFILE ENDPOINTS (ID = 1)
+    // -------------------------------
+
+    @GetMapping("/profile")
+    public ResponseEntity<UserEntity> getProfile() {
+        UserEntity profile = userService.getProfile();
+        if (profile == null) return ResponseEntity.notFound().build();
+        return ResponseEntity.ok(profile);
+    }
+
+    @PutMapping("/profile")
+    public ResponseEntity<UserEntity> updateProfile(@RequestBody UserEntity profileData) {
+        System.out.println("[UserController] updateProfile payload user=" + profileData.getUser() + " ownerWallet=" + profileData.getOwnerWallet());
+        UserEntity updated = userService.updateProfile(profileData);
+        if (updated == null) return ResponseEntity.notFound().build();
+        return ResponseEntity.ok(updated);
+    }
+
+
+    // -------------------------------
+    // EXISTING CRUD ROUTES
+    // -------------------------------
 
     @GetMapping
     public List<UserEntity> getAllUsers() {
@@ -43,7 +67,10 @@ private final UserService userService;
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<UserEntity> updateUser(@PathVariable Long id, @RequestBody UserEntity userDetails) {
+    public ResponseEntity<UserEntity> updateUser(
+            @PathVariable Long id,
+            @RequestBody UserEntity userDetails
+    ) {
         return userService.getUserById(id)
                 .map(user -> {
                     user.setUser(userDetails.getUser());

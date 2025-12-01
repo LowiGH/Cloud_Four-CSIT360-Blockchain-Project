@@ -62,6 +62,11 @@ public class TransactionController {
         return service.createTransaction(transaction);
     }
     
+    // Get transaction history for a user
+    @GetMapping("/users/{userId}/history")
+    public List<Transaction> getUserTransactionHistory(@PathVariable Long userId) {
+        return service.getUserTransactionHistory(userId);
+    }
     // Update transaction
     @PutMapping("/{id}")
     public ResponseEntity<Transaction> updateTransaction(
