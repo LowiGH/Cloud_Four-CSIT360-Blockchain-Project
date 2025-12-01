@@ -1,17 +1,82 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
+import { addEntry } from '../utils/history';
+import { getPrimaryAddress, findCardanoProvider, getNetworkInfo, connectWallet, disconnectWallet, isConnected } from '../utils/cardano';
+import "./Dashboard.css";
 
 export default function Transaction() {
+  const navigate = useNavigate();
   const [transactions, setTransactions] = useState([]);
   const [showNewTx, setShowNewTx] = useState(false);
   const [activeTab, setActiveTab] = useState("ALL");
   const [searchQuery, setSearchQuery] = useState("");
   const [theme, setTheme] = useState("light");
+  const [selectedTx, setSelectedTx] = useState(null);
+
 
   const [txType, setTxType] = useState("Send");
   const [toAddress, setToAddress] = useState("");
   const [amount, setAmount] = useState("");
   const [memo, setMemo] = useState("");
+ 
+ 
+  const [profile, setProfile] = useState({
+  username: "",
+  ownerWallet: "",
+});
+    const [providerName, setProviderName] = useState(null);
+    const [networkName, setNetworkName] = useState(null);
+    const [connectedAddress, setConnectedAddress] = useState(null);
+useEffect(() => {
+  axios
+    .get("http://localhost:8080/api/users/profile")
+    .then((res) => setProfile(res.data))
+    .catch((err) => console.error("Failed to load profile:", err));
+}, []);
+
+// try to read provider & network name for UI and validation
+useEffect(() => {
+  (async () => {
+    try {
+      const prov = await findCardanoProvider();
+      if (prov) setProviderName(prov.name || 'cardano');
+      const net = await getNetworkInfo();
+      if (net && net.name) setNetworkName(net.name);
+      // if previously connected in session, try to read address
+      if (isConnected()) {
+        try {
+          const addr = await getPrimaryAddress();
+          if (addr) setConnectedAddress(addr);
+        } catch (e) {}
+      }
+    } catch (e) {
+      // ignore errors here
+    }
+  })();
+}, []);
+
+const handleConnect = async () => {
+  try {
+    const result = await connectWallet();
+    if (!result) { alert('Failed to enable wallet or user declined permissions.'); return; }
+    setProviderName(result.name || 'cardano');
+    const addr = await getPrimaryAddress();
+    if (addr) setConnectedAddress(addr);
+    const net = await getNetworkInfo();
+    if (net && net.name) setNetworkName(net.name);
+  } catch (e) {
+    console.error('Error connecting to wallet:', e);
+    alert('Error connecting to wallet. See console for details.');
+  }
+};
+
+const handleDisconnect = () => {
+  disconnectWallet();
+  setProviderName(null);
+  setNetworkName(null);
+  setConnectedAddress(null);
+};
 
   // Load from API only ONCE
   useEffect(() => {
@@ -25,6 +90,28 @@ export default function Transaction() {
   const addTransaction = async () => {
     if (!toAddress.trim() || !amount) return;
 
+    // resolve owner wallet: prefer an explicitly-connected address (connectedAddress) first
+    let ownerWalletAddr = connectedAddress || profile.ownerWallet || "your-wallet-address";
+    try {
+      // if we don't already have a connected address try enabling the browser wallet
+      if (!ownerWalletAddr) {
+        const provider = await findCardanoProvider();
+        if (provider) {
+          const addr = await getPrimaryAddress();
+          if (addr) ownerWalletAddr = addr;
+        }
+      }
+    } catch (e) { /* ignore */ }
+
+    // if wallet is present and not on a preview/testnet network, prevent creating txs
+    try {
+      const net = await getNetworkInfo();
+      if (net && net.name && /cardano/i.test(providerName || '') && !/testnet|preview/i.test(net.name)) {
+        alert('Your wallet is not on preview/testnet. Switch to preview testnet before creating transactions.');
+        return;
+      }
+    } catch (e) { /* ignore */ }
+
     const newTx = {
       type: txType,
       toAddress: txType === "Send" ? toAddress : "",
@@ -32,7 +119,7 @@ export default function Transaction() {
       amount: parseFloat(amount),
       memo: memo || "No memo",
       status: "Pending",
-      ownerWallet: "your-wallet-address"
+      ownerWallet: ownerWalletAddr
     };
 
     try {
@@ -43,6 +130,11 @@ export default function Transaction() {
 
       // Add newly created transaction from server response
       setTransactions([res.data, ...transactions]);
+      // Log into unified history
+      try {
+        const details = `${res.data.type} ${res.data.amount} ADA ${res.data.toAddress ? `to ${res.data.toAddress}` : res.data.fromAddress ? `from ${res.data.fromAddress}` : ''} ${res.data.txHash ? `(${res.data.txHash})` : ''}`.trim();
+        addEntry(res.data.type || 'Transaction created', details);
+      } catch (e) { /* ignore */ }
 
       // reset form
       setToAddress("");
@@ -58,18 +150,24 @@ export default function Transaction() {
   // Confirm Transaction
   const confirmTransaction = async (txId) => {
     try {
-      const res = await axios.patch(
-        `http://localhost:8080/api/transactions/${txId}`,
-        { status: "Confirmed" }
-      );
+      // find the transaction in state and send the full object to the backend (PUT)
+      const txToConfirm = transactions.find((t) => t.id === txId);
+      if (!txToConfirm) throw new Error('Transaction not found in state');
 
-      // Update transaction in state
-      setTransactions(transactions.map(tx => 
-        tx.id === txId ? { ...tx, status: "Confirmed" } : tx
-      ));
+      const updatedTx = { ...txToConfirm, status: 'Confirmed' };
 
+      const res = await axios.put(`http://localhost:8080/api/transactions/${txId}`, updatedTx);
+
+      // Use updated data returned by the server if available
+      const returned = res?.data || updatedTx;
+
+      setTransactions(transactions.map((tx) => (tx.id === txId ? returned : tx)));
+
+      try { addEntry('Transaction confirmed', `Transaction ${txId} marked Confirmed`); } catch (e) {}
     } catch (err) {
-      console.error("Failed to confirm:", err);
+      console.error('Failed to confirm:', err);
+      // provide UI feedback
+      alert('Failed to confirm transaction. See console for details.');
     }
   };
 
@@ -177,9 +275,42 @@ export default function Transaction() {
               <span style={{ fontSize: "1.2rem" }}>+</span>
               New Transaction
             </button>
+                 {/* Profile Button using useNavigate */}
+            <button
+              onClick={connectedAddress ? handleDisconnect : handleConnect}
+              style={{
+                padding: '0.5rem 0.9rem',
+                borderRadius: '8px',
+                border: '1px solid #dbeafe',
+                background: connectedAddress ? '#ecfdf5' : '#f1f5f9',
+                cursor: 'pointer',
+                marginRight: '0.5rem'
+              }}
+              title={connectedAddress ? 'Disconnect wallet' : 'Connect wallet'}
+            >
+              {connectedAddress ? `${connectedAddress.slice(0, 8)}...` : 'Connect Wallet'}
+            </button>
+
+            <button
+              onClick={() => navigate("/users/profile")}
+              className="profile-button"
+              title="View Profile"
+            >
+              👤 Profile
+            </button>
+
           </div>
         </div>
       </header>
+      {providerName ? (
+        <div style={{ maxWidth: '1400px', margin: '0 auto', padding: '10px 2rem', background: '#f8fafc', borderBottom: '1px solid #e6eefb' }}>
+          Connected wallet: <strong>{providerName}</strong>
+          {networkName ? ` — network: ${networkName}` : ''}
+          {networkName && !/testnet|preview/i.test(networkName) ? (
+            <span style={{ color: '#b91c1c', marginLeft: 12 }}>Please switch to preview testnet.</span>
+          ) : null}
+        </div>
+      ) : null}
 
       {/* Main Content */}
       <main style={{ maxWidth: "1400px", margin: "0 auto", padding: "2rem" }}>

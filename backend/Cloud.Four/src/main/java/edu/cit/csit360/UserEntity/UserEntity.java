@@ -11,12 +11,18 @@ import jakarta.persistence.Table;
 @Entity
 @Table(name = "users")
 public class UserEntity {
-    @Id
+   @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "username")  // renamed to avoid 'user' keyword
+    @Column(name = "username")
     private String user;
+
+    @Column(nullable = true, unique = true)
+    private String email;
+
+    @Column(name = "owner_wallet")
+    private String ownerWallet;    // this is your wallet ID
 
     @Column(name = "date_time")
     private LocalDateTime dateTime;
@@ -26,26 +32,30 @@ public class UserEntity {
     @Column(name = "file_name")
     private String fileName;
 
-    @Column(name = "owner_wallet")
-    private String ownerWallet;
-
-    // Constructors
     public UserEntity() {}
 
-    public UserEntity(String user, LocalDateTime dateTime, String note, String fileName, String ownerWallet) {
+    public UserEntity(String user, String email, String ownerWallet,
+                      LocalDateTime dateTime, String note, String fileName) {
         this.user = user;
+        this.email = email;
+        this.ownerWallet = ownerWallet;
         this.dateTime = dateTime;
         this.note = note;
         this.fileName = fileName;
-        this.ownerWallet = ownerWallet;
     }
 
-    // Getters and Setters
+    // Getters & Setters
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
 
     public String getUser() { return user; }
     public void setUser(String user) { this.user = user; }
+
+    public String getEmail() { return email; }
+    public void setEmail(String email) { this.email = email; }
+
+    public String getOwnerWallet() { return ownerWallet; }
+    public void setOwnerWallet(String ownerWallet) { this.ownerWallet = ownerWallet; }
 
     public LocalDateTime getDateTime() { return dateTime; }
     public void setDateTime(LocalDateTime dateTime) { this.dateTime = dateTime; }
@@ -55,7 +65,4 @@ public class UserEntity {
 
     public String getFileName() { return fileName; }
     public void setFileName(String fileName) { this.fileName = fileName; }
-
-    public String getOwnerWallet() { return ownerWallet; }
-    public void setOwnerWallet(String ownerWallet) { this.ownerWallet = ownerWallet; }
 }
